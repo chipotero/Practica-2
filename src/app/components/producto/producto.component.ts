@@ -17,19 +17,28 @@ import { lastValueFrom } from 'rxjs';
 export class ProductoComponent implements OnInit{
   public productos!: Producto[];
   constructor(private productoService: ProductoService, private carritoService: CarritoService, private router: Router) { }
-  async ngOnInit() {
-    this.productos = await lastValueFrom(this.productoService.obtenerProducto()).then((prods) => prods);
+  ngOnInit(): void {
+    console.log('Componente inicializado'); // Depuración
+    this.productoService.obtenerProductos().subscribe(
+      data => {
+        console.log('Productos obtenidos en el componente:', data); // Depuración
+        this.productos = data;
+      },
+      error => {
+        console.error('Error al obtener productos:', error);
+      }
+    );
   }
   agregarACarrito(producto: any){
     this.carritoService.agregarProducto(producto);
   }
 
-  irACarrito(){
+  irACarrito():void{
     this.router.navigate(['/carrito']);
   }
 
 
-  irAlInventario() {
+  irAlInventario():void {
     this.router.navigate(['/inventario']);
   }
 
